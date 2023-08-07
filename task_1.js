@@ -10,17 +10,37 @@ The resulting array should contain only unique elements based on the callback's 
 
 
 let arr = [1, 2, 2, 4, 5, 5, 5, 5]
-function customFilterUnique(arr, callback) {
-    return arr.filter((item, index) => {
-        for (let i = 0; i < index; i++) {
-            if (callback(item, arr[i])) {
-                return false;
+
+function customFilterUnique(array, callback) {
+    const uniqueElements = [];
+    const uniqueKeys = new Set();
+
+    for (const element of array) {
+        const key = callback(element);
+        if (!uniqueKeys.has(key)) {
+            uniqueKeys.add(key);
+            if (typeof element === 'object') {
+                uniqueElements.push(element);
+            } else {
+                uniqueElements.push(key);
             }
         }
-        return true;
-    })
+    }
 
+    return uniqueElements;
 }
+
+function mult(item) {
+    return item * 2;
+}
+
+
+
+console.log(customFilterUnique(arr, mult))
+
+
+
+
 
 let students = [{
     id: 1,
@@ -46,9 +66,13 @@ let students = [{
 }
 ]
 
+function getName(obj) {
+    return obj.name;
+}
 
-console.log(customFilterUnique(arr, (a, b) => a === b))
-let resultStudents = customFilterUnique(students, (a, b) => a.name === b.name);
+let resultStudents = customFilterUnique(students, getName);
+console.log(resultStudents);
 for (let i = 0; i < resultStudents.length; i++) {
     console.log(resultStudents[i])
 }
+
